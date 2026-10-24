@@ -55,7 +55,7 @@ button:hover,button:focus-visible{background:var(--tx);color:var(--bg);outline:n
 
 <section id="prompt" class="screen"><div class="wrap">
   <h1>Archive</h1>
-  <div class="dim">Type a file name exactly to open it. Only people who agreed to be included are on file.</div>
+  <div class="dim">type a file name exactly to open it.</div>
   <form id="sf" class="row" autocomplete="off"><span>open&gt;</span><input id="q" type="text" aria-label="File name" spellcheck="false" autocapitalize="off"></form>
   <div id="msg" role="status"></div>
   <div id="loaded" hidden><div class="dim" style="margin:22px 0 6px">loaded files</div><div id="lbtns"></div></div>
@@ -98,15 +98,15 @@ const person = p => ({
 const FILES = [
   person({
     name:"Sample One", code:"S-01", nick:"The First", id:"sample-one",
-    speed:7, strength:5, durability:6, height:4, stamina:8, precision:9,
-    cognition:6, social:7, adaptability:8, creativity:5, composure:4, perception:9,
-    desc:"Write a short description here."
+    speed:10, strength:7, durability:8, height:10, stamina:8, precision:2,
+    cognition:6, social:7, adaptability:8, creativity:10, composure:4, perception:9,
+    desc:"The first. He has seen everything."
   }),
   person({
     name:"Sample Two", code:"S-02", nick:"The Second", id:"sample-two",
     speed:3, strength:8, durability:7, height:9, stamina:6, precision:2,
     cognition:9, social:4, adaptability:5, creativity:8, composure:7, perception:6,
-    desc:""
+    desc:"The Second. He aint really seen much."
   }),
 ];
 /* =================================== */
@@ -131,7 +131,7 @@ function renderLoaded(){
 
 /* boot */
 (async()=>{
-  for(const l of ["ARCHIVE SYSTEM v1.0","checking memory .......... ok","mounting records ......... ok","verifying consent list ... ok","","ready."]){ $("bootlog").textContent+=l+"\n"; await sleep(380); }
+  for(const l of ["ARCHIVE SYSTEM v1.0","checking memory .......... ok","mounting records ......... ok","balancing karmas ... ... ok","","ready."]){ $("bootlog").textContent+=l+"\n"; await sleep(380); }
   await sleep(500); show("prompt"); $("q").focus();
 })();
 
@@ -152,7 +152,7 @@ async function reveal(e){
   log.textContent=""; card.hidden=true; current=e; show("result");
   const ok=()=>id===run;
   if(loaded.has(e.name)){ log.textContent="> file already loaded\n"; $("rcode").textContent=e.code; $("rnick").textContent=e.nick; card.hidden=false; card.focus(); return; }
-  for(const l of ["> locating file ...","> consent verified"]){ if(!ok())return; log.textContent+=l+"\n"; await sleep(450); }
+  for(const l of ["> locating file ...","> found."]){ if(!ok())return; log.textContent+=l+"\n"; await sleep(450); }
   if(!ok())return; log.textContent+="> decrypting ";
   const base=log.textContent;
   for(let i=1;i<=20;i++){ if(!ok())return; log.textContent=base+"["+"█".repeat(i)+"░".repeat(20-i)+"]"; await sleep(60); }
