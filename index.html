@@ -127,7 +127,7 @@ async function reveal(e){
   const id=++run, log=$("rlog"), card=$("card");
   log.textContent=""; card.hidden=true; current=e; show("result");
   const ok=()=>id===run;
-  for(const l of ["> locating file ...","> consent verified"]){ if(!ok())return; log.textContent+=l+"\n"; await sleep(450); }
+  for(const l of ["> locating file ...","> found."]){ if(!ok())return; log.textContent+=l+"\n"; await sleep(450); }
   if(!ok())return; log.textContent+="> decrypting ";
   const base=log.textContent;
   for(let i=1;i<=20;i++){ if(!ok())return; log.textContent=base+"["+"█".repeat(i)+"░".repeat(20-i)+"]"; await sleep(60); }
