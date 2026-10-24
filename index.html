@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Database</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#161616;--paper:#fbfaf6;--term:#050505;--text:#e9e7df;--dim:#77756d}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--term);color:var(--text);font-family:"VT323","Courier New",monospace;font-size:22px;line-height:1.35}
+.screen{display:none;min-height:100vh;padding:28px 22px}
+.screen.on{display:block}
+#boot pre{margin:0;white-space:pre-wrap;max-width:720px}
+#prompt{max-width:720px;margin:0 auto}
+#prompt h1{font-weight:400;font-size:34px;margin:0 0 4px}
+#prompt p{margin:0 0 18px;color:var(--dim)}
+.row{display:flex;gap:10px;align-items:center;border-bottom:2px solid var(--text);padding-bottom:6px}
+.row span{white-space:nowrap}
+#q{flex:1;min-width:0;background:none;border:0;color:var(--text);font:inherit;caret-color:var(--text)}
+#q:focus{outline:none}
+.row:focus-within{border-bottom-style:dashed}
+#msg{min-height:1.4em;margin-top:12px}
+#file{background:var(--paper);color:var(--ink);font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px}
+.sheet{max-width:1000px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:3px solid var(--ink);padding-bottom:8px;margin-bottom:22px}
+.top h2{margin:0;font-weight:400;font-size:34px}
+button{font:inherit;background:var(--paper);color:var(--ink);border:2px solid var(--ink);padding:4px 14px;cursor:pointer}
+button:hover{background:var(--ink);color:var(--paper)}
+button:focus-visible,#q:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.portrait{width:min(300px,100%);aspect-ratio:3/4;margin:0 auto 26px;border:3px solid var(--ink);position:relative;overflow:hidden;background:#fff}
+.portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;visibility:hidden}
+.portrait img.show{visibility:visible}
+.portrait .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--dim);padding:12px;background:repeating-linear-gradient(45deg,#fff 0 9px,#f1efe8 9px 10px)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.charts h3{margin:0 0 4px;font-weight:400;font-size:24px;text-align:center}
+.charts svg{width:100%;height:auto;display:block}
+.vals{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px 12px;margin-top:6px;font-size:15px}
+.vals b{font-weight:400;float:right}
+.note{margin-top:22px;font-size:15px;color:#55534c}
+@media(max-width:720px){.charts{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<section id="boot" class="screen on" aria-live="polite"><pre id="bootlog"></pre></section>
+
+<section id="prompt" class="screen">
+  <h1>Archive</h1>
+  <p>Type a file name exactly to open it. Only people who agreed to be included are on file.</p>
+  <form id="sf" class="row" autocomplete="off">
+    <span>open&gt;</span>
+    <input id="q" type="text" aria-label="File name" spellcheck="false" autocapitalize="off">
+  </form>
+  <div id="msg" role="status"></div>
+</section>
+
+<section id="file" class="screen">
+  <div class="sheet">
+    <div class="top"><h2 id="fname"></h2><button id="close" type="button">Close file</button></div>
+    <div class="portrait" id="portrait"></div>
+    <div class="charts">
+      <div><h3>Physical</h3><div id="c1"></div></div>
+      <div><h3>Mental</h3><div id="c2"></div></div>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+</section>
+
+<script>
+/* ============ EDIT HERE ============
+   One entry per consenting person.
+   name: the exact text someone must type to open the file.
+   frames: two drawing images (put them in an /img folder in your repo).
+   physical: Speed, Strength, Durability, Height, Stamina, Precision (0-10)
+   mental: Cognition, Social, Adaptability, Creativity, Composure, Perception (0-10)
+*/
+const FILES = [
+  { name: "Sample One", frames: ["img/sample-one-1.png", "img/sample-one-2.png"],
+    physical: [7, 5, 6, 4, 8, 9], mental: [6, 7, 8, 5, 4, 9], note: "Sample entry. Replace with real data." },
+  { name: "Sample Two", frames: ["img/sample-two-1.png", "img/sample-two-2.png"],
+    physical: [3, 8, 7, 9, 6, 2], mental: [9, 4, 5, 8, 7, 6], note: "" }
+];
+const PHYS = ["Speed","Strength","Durability","Height","Stamina","Precision"];
+const MENT = ["Cognition","Social","Adaptability","Creativity","Composure","Perception"];
+const LEVELS = 10;
+const FRAME_MS = 550;
+/* =================================== */
+
+const $ = id => document.getElementById(id);
+const norm = s => s.trim().replace(/\s+/g," ").toLowerCase();
+const show = id => document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id));
+
+/* ---- boot ---- */
+const BOOT = ["ARCHIVE SYSTEM v1.0","checking memory .......... ok","mounting records ......... ok","verifying consent list ... ok","","ready."];
+(function boot(){
+  const log = $("bootlog"); let i = 0;
+  const fast = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  (function next(){
+    if (i < BOOT.length){ log.textContent += BOOT[i++] + "\n"; setTimeout(next, fast ? 0 : 380); }
+    else setTimeout(()=>{ show("prompt"); $("q").focus(); }, fast ? 0 : 500);
+  })();
+})();
+
+/* ---- chart ---- */
+const C = 170, R_OUT = 165, R_RING = 130, R_IN = 112;
+const ANG = [-90,-30,30,90,150,210];
+const pt = (r,a) => { const t = a*Math.PI/180; return [C + r*Math.cos(t), C + r*Math.sin(t)]; };
+const f = n => n.toFixed(1);
+function sector(r1,r2,a1,a2){
+  const [x1,y1]=pt(r2,a1),[x2,y2]=pt(r2,a2),[x3,y3]=pt(r1,a2),[x4,y4]=pt(r1,a1);
+  return `M${f(x1)} ${f(y1)}A${r2} ${r2} 0 0 1 ${f(x2)} ${f(y2)}L${f(x3)} ${f(y3)}A${r1} ${r1} 0 0 0 ${f(x4)} ${f(y4)}Z`;
+}
+function chart(labels, vals, pid){
+  let s = `<svg viewBox="0 0 340 340" role="img" aria-label="${labels.map((l,i)=>l+" "+vals[i]+" of "+LEVELS).join(", ")}">
+  <defs><pattern id="h${pid}" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#fff"/><line x1="0" y1="0" x2="0" y2="5" stroke="#161616" stroke-width="2"/></pattern></defs>
+  <circle cx="${C}" cy="${C}" r="${R_OUT}" fill="#fff" stroke="#161616" stroke-width="2.5"/>
+  <circle cx="${C}" cy="${C}" r="${R_RING}" fill="none" stroke="#161616" stroke-width="1.5"/>`;
+  ANG.forEach(a => { s += `<path d="${sector(R_RING,R_OUT,a+19,a+41)}" fill="url(#h${pid})" stroke="#161616" stroke-width="1.5"/>`; });
+  s += `<circle cx="${C}" cy="${C}" r="${R_IN}" fill="#fff" stroke="#161616" stroke-width="3"/>`;
+  ANG.forEach((a,i) => {
+    const [x,y]=pt(R_IN,a);
+    s += `<line x1="${C}" y1="${C}" x2="${f(x)}" y2="${f(y)}" stroke="#161616" stroke-width="2"/>`;
+    for (let n=1;n<=LEVELS;n++){
+      const r=R_IN*n/LEVELS,[px,py]=pt(r,a),t=(a+90)*Math.PI/180,dx=Math.cos(t)*(n%5===0?7:4),dy=Math.sin(t)*(n%5===0?7:4);
+      s += `<line x1="${f(px-dx)}" y1="${f(py-dy)}" x2="${f(px+dx)}" y2="${f(py+dy)}" stroke="#161616" stroke-width="1.6"/>`;
+    }
+    const [lx,ly]=pt((R_RING+R_OUT)/2-1,a), rot = Math.sin(a*Math.PI/180) > 0.01 ? a-90 : a+90;
+    s += `<text transform="translate(${f(lx)} ${f(ly)}) rotate(${rot})" text-anchor="middle" dominant-baseline="central" font-size="14" fill="#161616">${labels[i]}</text>`;
+  });
+  const pts = vals.map((v,i)=>pt(R_IN*Math.max(0,Math.min(LEVELS,v))/LEVELS, ANG[i]));
+  s += `<polygon points="${pts.map(p=>f(p[0])+","+f(p[1])).join(" ")}" fill="rgba(22,22,22,.22)" stroke="#161616" stroke-width="3" stroke-linejoin="round"/>`;
+  pts.forEach(p => s += `<circle cx="${f(p[0])}" cy="${f(p[1])}" r="4" fill="#161616"/>`);
+  s += `<circle cx="${C}" cy="${C}" r="4.5" fill="#161616"/></svg>`;
+  s += `<div class="vals">${labels.map((l,i)=>`<span>${l}<b>${vals[i]}</b></span>`).join("")}</div>`;
+  return s;
+}
+
+/* ---- open / close ---- */
+let timer = null;
+function open(entry){
+  $("fname").textContent = entry.name;
+  $("c1").innerHTML = chart(PHYS, entry.physical, "p");
+  $("c2").innerHTML = chart(MENT, entry.mental, "m");
+  $("note").textContent = entry.note || "";
+  const box = $("portrait"); box.innerHTML = "";
+  const imgs = entry.frames.map((src,i) => {
+    const im = new Image(); im.alt = i===0 ? "Drawing of "+entry.name : ""; im.src = src;
+    im.onerror = () => { im.remove(); if(!box.querySelector("img") && !box.querySelector(".ph")){ const d=document.createElement("div"); d.className="ph"; d.textContent="Drawing not added yet"; box.appendChild(d);} };
+    box.appendChild(im); return im;
+  });
+  let k = 0; imgs[0].classList.add("show");
+  clearInterval(timer);
+  if (imgs.length > 1) timer = setInterval(()=>{ imgs[k].classList.remove("show"); k=(k+1)%imgs.length; imgs[k].classList.add("show"); }, FRAME_MS);
+  show("file"); window.scrollTo(0,0); $("close").focus();
+}
+$("sf").addEventListener("submit", e => {
+  e.preventDefault();
+  const hit = FILES.find(x => norm(x.name) === norm($("q").value));
+  if (hit){ $("msg").textContent = ""; open(hit); }
+  else $("msg").textContent = "No file found. Check the exact name and try again.";
+});
+$("close").addEventListener("click", () => { clearInterval(timer); $("q").value=""; $("msg").textContent=""; show("prompt"); $("q").focus(); });
+</script>
+</body>
+</html>
