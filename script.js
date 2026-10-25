@@ -103,7 +103,12 @@ function renderLoaded(){
     else await type(l);
     log.textContent+="\n"; await sleep(l?200:120);
   }
-  await sleep(700); show("prompt"); $("q").focus();
+  await sleep(700);
+show("prompt");
+
+playMusic(interfaceMusic);
+
+$("q").focus();
 })();
 
 /* scramble text into place */
