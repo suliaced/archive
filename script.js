@@ -44,8 +44,8 @@ const bootMusic = document.getElementById("bootMusic");
 const interfaceMusic = document.getElementById("interfaceMusic");
 
 // Keep both tracks at a safe starting volume and crossfade between them.
-const MUSIC_FADE_MS = 700;
-const MUSIC_STEP_MS = 40;
+const MUSIC_FADE_MS = 1300;
+const MUSIC_STEP_MS = 60;
 let currentMusic = null;
 let musicFadeTimer = null;
 let userHasInteracted = false;
