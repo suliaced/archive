@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archive</title>
+<link rel="icon" type="image/svg+xml" href="eye.svg">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section id="boot" class="screen on"><pre><span id="bootlog"></span><span class="cur" aria-hidden="true">█</span></pre></section>
+
+<section id="prompt" class="screen"><div class="wrap">
+  <h1>archive</h1>
+  <div class="dim">type a file name exactly to open it.</div>
+  <form id="sf" class="row" autocomplete="off"><span>open&gt;</span><input id="q" type="text" aria-label="File name" spellcheck="false" autocapitalize="off"></form>
+  <div id="msg" role="status"></div>
+  <div id="loaded" hidden><div class="dim" style="margin:22px 0 6px">loaded files</div><div id="lbtns"></div></div>
+</div></section>
+
+<section id="result" class="screen"><div class="wrap">
+  <pre id="rlog" aria-live="polite"></pre>
+  <button id="card" class="card" type="button" hidden>
+    <small>file found</small><b id="rcode"></b><i id="rnick"></i><small class="hint">[ click to open profile ]</small>
+  </button>
+  <p><button id="rback" type="button"><span class="ar">&lt;</span> Back</button></p>
+</div></section>
+
+<section id="profile" class="screen">
+  <div class="top"><button id="close" type="button"><span class="ar">&lt;</span> Return</button><h2 id="ptitle"></h2></div>
+  <div class="profile-layout">
+    <div class="identity"><div class="portrait" id="portrait"></div><div id="pcode"></div><div id="pnick"></div></div>
+    <div class="categories">
+      <div class="category">
+        <button class="category-btn" type="button" aria-expanded="false" aria-controls="physical-panel" data-category="physical">
+          <span>Physical</span><span class="cat-ar">+</span>
+        </button>
+        <div class="category-panel" id="physical-panel" hidden>
+          <div class="wheel-wrap"><div id="c1"></div></div>
+          <div class="category-desc" id="physical-desc"></div>
+        </div>
+      </div>
+
+      <div class="category">
+        <button class="category-btn" type="button" aria-expanded="false" aria-controls="mental-panel" data-category="mental">
+          <span>Mental</span><span class="cat-ar">+</span>
+        </button>
+        <div class="category-panel" id="mental-panel" hidden>
+          <div class="wheel-wrap"><div id="c2"></div></div>
+          <div class="category-desc" id="mental-desc"></div>
+        </div>
+      </div>
+
+      <div class="category">
+        <button class="category-btn" type="button" aria-expanded="false" aria-controls="wip-panel" data-category="wip">
+          <span>Work in progress.</span><span class="cat-ar">+</span>
+        </button>
+        <div class="category-panel wip-panel" id="wip-panel" hidden>
+          <div class="wip-text">this section is still being developed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
