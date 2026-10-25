@@ -43,21 +43,62 @@ const norm=s=>s.trim().replace(/\s+/g," ").toLowerCase();
 const bootMusic = document.getElementById("bootMusic");
 const interfaceMusic = document.getElementById("interfaceMusic");
 
-async function playMusic(track) {
-  for (const audio of [bootMusic, interfaceMusic]) {
-    if (audio !== track) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
+// Keep both tracks at a safe starting volume and crossfade between them.
+const MUSIC_FADE_MS = 2200;
+const MUSIC_STEP_MS = 40;
+let currentMusic = null;
+let musicFadeTimer = null;
+let userHasInteracted = false;
+
+[bootMusic, interfaceMusic].forEach(audio => {
+  if (audio) audio.volume = 0;
+});
+
+function playMusic(track) {
+  if (!track) return;
+  if (currentMusic === track && !track.paused) return;
+
+  if (musicFadeTimer) {
+    clearInterval(musicFadeTimer);
+    musicFadeTimer = null;
   }
 
-  try {
-    if (track.paused) {
-      await track.play();
+  const previous = currentMusic;
+  currentMusic = track;
+  const startVolumes = new Map();
+  [bootMusic, interfaceMusic].forEach(audio => {
+    if (audio) startVolumes.set(audio, audio.volume);
+  });
+
+  // Start the incoming track. Audible autoplay still requires a user gesture
+  // in browsers that block autoplay, so the first click/key unlocks playback.
+  track.volume = 0;
+  track.play().catch(error => {
+    console.info("Browser blocked audio until you interact with the page.", error);
+  });
+
+  const steps = Math.max(1, Math.ceil(MUSIC_FADE_MS / MUSIC_STEP_MS));
+  let step = 0;
+  musicFadeTimer = setInterval(() => {
+    step++;
+    const progress = Math.min(1, step / steps);
+
+    if (previous && previous !== track) {
+      previous.volume = Math.max(0, (startVolumes.get(previous) || 0) * (1 - progress));
     }
-  } catch (error) {
-    console.log("Music will start after browser interaction.");
-  }
+    track.volume = Math.min(1, progress);
+
+    if (progress >= 1) {
+      clearInterval(musicFadeTimer);
+      musicFadeTimer = null;
+      if (previous && previous !== track) {
+        previous.pause();
+        previous.currentTime = 0;
+        previous.volume = 0;
+      }
+      track.volume = 1;
+    }
+  }, MUSIC_STEP_MS);
 }
 
 function show(id) {
@@ -65,24 +106,24 @@ function show(id) {
     screen.classList.toggle("on", screen.id === id);
   });
 
+  // Change tracks only when switching between the boot screen and the main UI.
   if (id === "boot") {
     playMusic(bootMusic);
-  } else {
+  } else if (id === "prompt" || id === "result" || id === "profile") {
     playMusic(interfaceMusic);
   }
 }
-function startVisibleMusic() {
+
+// Browsers generally block sound until the visitor interacts once.
+// Start the appropriate track on that first click or keypress.
+function unlockAndStartMusic() {
+  if (userHasInteracted) return;
+  userHasInteracted = true;
   const activeScreen = document.querySelector(".screen.on");
-
-  if (activeScreen && activeScreen.id === "boot") {
-    playMusic(bootMusic);
-  } else {
-    playMusic(interfaceMusic);
-  }
+  playMusic(activeScreen && activeScreen.id === "boot" ? bootMusic : interfaceMusic);
 }
-
-document.addEventListener("pointerdown", startVisibleMusic);
-document.addEventListener("keydown", startVisibleMusic);
+document.addEventListener("pointerdown", unlockAndStartMusic, { once: true });
+document.addEventListener("keydown", unlockAndStartMusic, { once: true });
 const fast=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const sleep=ms=>new Promise(r=>setTimeout(r,fast?0:ms));
 let run=0, timer=null, current=null;
@@ -103,12 +144,7 @@ function renderLoaded(){
     else await type(l);
     log.textContent+="\n"; await sleep(l?200:120);
   }
-  await sleep(700);
-show("prompt");
-
-playMusic(interfaceMusic);
-
-$("q").focus();
+  await sleep(700); show("prompt"); $("q").focus();
 })();
 
 /* scramble text into place */
@@ -250,3 +286,4 @@ $("sf").addEventListener("submit",ev=>{ev.preventDefault();
 $("card").addEventListener("click",()=>openProfile(current));
 const home=()=>{run++;clearInterval(timer);$("q").value="";$("msg").textContent="";show("prompt");$("q").focus();};
 $("rback").addEventListener("click",home); $("close").addEventListener("click",home);
+
