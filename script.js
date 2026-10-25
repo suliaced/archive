@@ -40,7 +40,37 @@ const LEVELS=10;
 
 const $=id=>document.getElementById(id);
 const norm=s=>s.trim().replace(/\s+/g," ").toLowerCase();
-const show=id=>document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));
+const bootMusic = document.getElementById("bootMusic");
+const interfaceMusic = document.getElementById("interfaceMusic");
+
+async function playMusic(track) {
+  for (const audio of [bootMusic, interfaceMusic]) {
+    if (audio !== track) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  }
+
+  try {
+    if (track.paused) {
+      await track.play();
+    }
+  } catch (error) {
+    console.log("Music will start after browser interaction.");
+  }
+}
+
+function show(id) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.toggle("on", screen.id === id);
+  });
+
+  if (id === "boot") {
+    playMusic(bootMusic);
+  } else {
+    playMusic(interfaceMusic);
+  }
+}
 const fast=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const sleep=ms=>new Promise(r=>setTimeout(r,fast?0:ms));
 let run=0, timer=null, current=null;
