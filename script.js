@@ -199,7 +199,7 @@ document.querySelectorAll(".category-btn").forEach(btn=>{
 
 $("sf").addEventListener("submit",ev=>{ev.preventDefault();
   const hit=FILES.find(x=>norm(x.name)===norm($("q").value));
-  if(hit){$("msg").textContent="";reveal(hit);} else $("msg").textContent="No file found. Check the exact name and try again.";});
+  if(hit){$("msg").textContent="";reveal(hit);} else $("msg").textContent="no file found.";});
 $("card").addEventListener("click",()=>openProfile(current));
 const home=()=>{run++;clearInterval(timer);$("q").value="";$("msg").textContent="";show("prompt");$("q").focus();};
 $("rback").addEventListener("click",home); $("close").addEventListener("click",home);
