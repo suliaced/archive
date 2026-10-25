@@ -71,6 +71,18 @@ function show(id) {
     playMusic(interfaceMusic);
   }
 }
+function startVisibleMusic() {
+  const activeScreen = document.querySelector(".screen.on");
+
+  if (activeScreen && activeScreen.id === "boot") {
+    playMusic(bootMusic);
+  } else {
+    playMusic(interfaceMusic);
+  }
+}
+
+document.addEventListener("pointerdown", startVisibleMusic);
+document.addEventListener("keydown", startVisibleMusic);
 const fast=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const sleep=ms=>new Promise(r=>setTimeout(r,fast?0:ms));
 let run=0, timer=null, current=null;
