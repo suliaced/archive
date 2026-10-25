@@ -16,19 +16,19 @@ const person = p => ({
 const FILES = [
   person({
     name:"Sample One", code:"S-01", nick:"The First", id:"sample-one",
-    speed:10, strength:7, durability:8, height:10, stamina:8, precision:2,
-    cognition:6, social:7, adaptability:8, creativity:10, composure:4, perception:9,
+    speed:10, strength:10, durability:10, height:10, stamina:10, precision:10,
+    cognition:10, social:10, adaptability:10, creativity:10, composure:10, perception:10,
     desc:"The first. He has seen everything.",
-    physicalDesc:"Fast, durable, and unusually tall. His physical profile favors movement and endurance over precision.",
-    mentalDesc:"Highly creative and perceptive, with strong adaptability. His composure is the main weakness in high-pressure situations."
+    physicalDesc:"beast",
+    mentalDesc:"genius"
   }),
   person({
     name:"Sample Two", code:"S-02", nick:"The Second", id:"sample-two",
-    speed:3, strength:8, durability:7, height:9, stamina:6, precision:2,
-    cognition:9, social:4, adaptability:5, creativity:8, composure:7, perception:6,
+    speed:3, strength:3, durability:3, height:3, stamina:2, precision:2,
+    cognition:1, social:1, adaptability:1, creativity:1, composure:1, perception:1,
     desc:"The Second. He aint really seen much.",
-    physicalDesc:"Strong and durable with considerable height, but noticeably slower and less precise than the first subject.",
-    mentalDesc:"Exceptional cognition and good composure, though social ability and adaptability are comparatively limited."
+    physicalDesc:"weak",
+    mentalDesc:"idiot"
   }),
 ];
 /* =================================== */
