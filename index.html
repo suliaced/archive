@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="A retro-terminal character archive.">
+
+  <title>archive</title>
+
+  <link rel="icon" type="image/svg+xml" href="eye.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Audio tracks: keep these paths matched to your repository folders. -->
+  <audio id="bootMusic" src="audio/boot.mp3" loop preload="auto"></audio>
+  <audio id="interfaceMusic" src="audio/interface.mp3" loop preload="auto"></audio>
+  <audio id="decryptSfx" src="audio/decrypt.mp3" preload="auto"></audio>
+  <audio id="loadedSfx" src="audio/loaded.mp3" preload="auto"></audio>
+
+  <section id="boot" class="screen on" aria-label="System boot">
+    <pre><span id="bootlog"></span><span class="cur" aria-hidden="true">█</span></pre>
+  </section>
+
+  <section id="prompt" class="screen" aria-label="Archive search">
+    <div class="wrap">
+      <h1>archive</h1>
+      <div class="dim">type a file to open it.</div>
+
+      <form id="sf" class="row" autocomplete="off">
+        <span>open&gt;</span>
+        <input
+          id="q"
+          type="text"
+          aria-label="File name"
+          spellcheck="false"
+          autocapitalize="off"
+        >
+      </form>
+
+      <div id="msg" role="status" aria-live="polite"></div>
+
+      <div id="loaded" hidden>
+        <div class="dim" style="margin: 22px 0 6px">loaded files</div>
+        <div id="lbtns"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="screen" aria-label="Search result">
+    <div class="wrap">
+      <pre id="rlog" aria-live="polite"></pre>
+
+      <button id="card" class="card" type="button" hidden>
+        <small>file found</small>
+        <b id="rcode"></b>
+        <i id="rnick"></i>
+        <small class="hint">[ click to open profile ]</small>
+      </button>
+
+      <p>
+        <button id="rback" type="button">
+          <span class="ar">&lt;</span> Back
+        </button>
+      </p>
+    </div>
+  </section>
+
+  <section id="profile" class="screen" aria-label="Character profile">
+    <div class="top">
+      <button id="close" type="button">
+        <span class="ar">&lt;</span> Return
+      </button>
+      <h2 id="ptitle"></h2>
+    </div>
+
+    <div class="profile-layout">
+      <div class="identity">
+        <div class="portrait" id="portrait"></div>
+        <div id="pcode"></div>
+        <div id="pnick"></div>
+      </div>
+
+      <div class="categories">
+        <div class="category">
+          <button
+            class="category-btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="physical-panel"
+            data-category="physical"
+          >
+            <span>physical</span><span class="cat-ar">+</span>
+          </button>
+
+          <div class="category-panel" id="physical-panel" hidden>
+            <div class="wheel-wrap"><div id="c1"></div></div>
+            <div class="category-desc" id="physical-desc"></div>
+          </div>
+        </div>
+
+        <div class="category">
+          <button
+            class="category-btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mental-panel"
+            data-category="mental"
+          >
+            <span>mental</span><span class="cat-ar">+</span>
+          </button>
+
+          <div class="category-panel" id="mental-panel" hidden>
+            <div class="wheel-wrap"><div id="c2"></div></div>
+            <div class="category-desc" id="mental-desc"></div>
+          </div>
+        </div>
+
+        <div class="category">
+          <button
+            class="category-btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="wip-panel"
+            data-category="wip"
+          >
+            <span>work in progress.</span><span class="cat-ar">+</span>
+          </button>
+
+          <div class="category-panel wip-panel" id="wip-panel" hidden>
+            <div class="wip-text">this section is still being developed.</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="character-desc" id="pdesc" aria-label="Character description"></aside>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
