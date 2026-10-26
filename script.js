@@ -18,7 +18,7 @@ const FILES = [
     name:"Sample One", code:"S-01", nick:"The First", id:"sample-one",
     speed:10, strength:10, durability:10, height:10, stamina:10, precision:10,
     cognition:10, social:10, adaptability:10, creativity:10, composure:10, perception:10,
-    desc:"The first. He has seen everything.",
+    desc:"placeholder placeholder placeholder placeholder Placeholder.",
     physicalDesc:"beast",
     mentalDesc:"genius"
   }),
@@ -26,7 +26,7 @@ const FILES = [
     name:"Sample Two", code:"S-02", nick:"The Second", id:"sample-two",
     speed:3, strength:3, durability:3, height:3, stamina:2, precision:2,
     cognition:1, social:1, adaptability:1, creativity:1, composure:1, perception:1,
-    desc:"The Second. He aint really seen much.",
+    desc:"placeholder placeholder placeholder placeholder Placeholder.",
     physicalDesc:"weak",
     mentalDesc:"idiot"
   }),
