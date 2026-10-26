@@ -22,6 +22,14 @@ const FILES = [
     physicalDesc:"beast",
     mentalDesc:"genius"
   }),
+   person({
+    name:"Sample Three", code:"S-03", nick:"The Third", id:"sample-three",
+    speed:5, strength:7, durability:4, height:5, stamina:3, precision:2,
+    cognition:10, social:3, adaptability:5, creativity:4, composure:1, perception:3,
+    desc:"placeholder placeholder placeholder placeholder Placeholder.",
+    physicalDesc:"average",
+    mentalDesc:"nerd"
+  }),
   person({
     name:"Sample Two", code:"S-02", nick:"The Second", id:"sample-two",
     speed:3, strength:3, durability:3, height:3, stamina:2, precision:2,
