@@ -350,3 +350,6 @@ const home=()=>{
   show("prompt");
   $("q").focus();
 };
+
+$("rback").addEventListener("click",home);
+$("close").addEventListener("click",home);
