@@ -183,10 +183,45 @@ async function reveal(e){
   const ok=()=>id===run;
   if(loaded.has(e.name)){ log.textContent="> file already loaded\n"; $("rcode").textContent=e.code; $("rnick").textContent=e.nick; card.hidden=false; card.focus(); return; }
   for(const l of ["> locating file ...","> found"]){ if(!ok())return; log.textContent+=l+"\n"; await sleep(450); }
-  if(!ok())return; playSfx(decryptSfx); log.textContent+="> decrypting ";
-  const base=log.textContent;
-  for(let i=1;i<=20;i++){ if(!ok())return; log.textContent=base+"["+"█".repeat(i)+"░".repeat(20-i)+"]"; await sleep(60); }
-  if(!ok())return; log.textContent+="\n> done\n"; await sleep(300);
+  if(!ok())return;
+
+// Start decrypt sound
+decryptSfx.currentTime = 0;
+decryptSfx.play().catch(() => {});
+
+log.textContent += "> decrypting ";
+const base = log.textContent;
+
+// Random duration between 500ms and 3500ms
+const decryptTime = 500 + Math.random() * 3000;
+
+const steps = 20;
+const stepTime = decryptTime / steps;
+
+for(let i = 1; i <= steps; i++){
+  if(!ok()){
+    decryptSfx.pause();
+    decryptSfx.currentTime = 0;
+    return;
+  }
+
+  log.textContent =
+    base +
+    "[" +
+    "█".repeat(i) +
+    "░".repeat(steps - i) +
+    "]";
+
+  await sleep(stepTime);
+}
+
+// Stop sound immediately when finished
+decryptSfx.pause();
+decryptSfx.currentTime = 0;
+
+if(!ok())return;
+log.textContent += "\n> done\n";
+await sleep(300);
   if(!ok())return; card.hidden=false; card.focus(); loaded.set(e.name,e); renderLoaded(); playSfx(loadedSfx);
   await Promise.all([scramble($("rcode"),e.code,700),scramble($("rnick"),e.nick,900)]);
 }
@@ -303,5 +338,15 @@ $("sf").addEventListener("submit",ev=>{ev.preventDefault();
   const hit=FILES.find(x=>norm(x.name)===norm($("q").value));
   if(hit){$("msg").textContent="";reveal(hit);} else $("msg").textContent="no file found.";});
 $("card").addEventListener("click",()=>openProfile(current));
-const home=()=>{run++;clearInterval(timer);$("q").value="";$("msg").textContent="";show("prompt");$("q").focus();};
-$("rback").addEventListener("click",home); $("close").addEventListener("click",home);
+const home=()=>{
+  run++;
+  clearInterval(timer);
+
+  decryptSfx.pause();
+  decryptSfx.currentTime = 0;
+
+  $("q").value="";
+  $("msg").textContent="";
+  show("prompt");
+  $("q").focus();
+};
