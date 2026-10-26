@@ -44,8 +44,8 @@ const bootMusic = document.getElementById("bootMusic");
 const interfaceMusic = document.getElementById("interfaceMusic");
 
 // Keep both tracks at a safe starting volume and crossfade between them.
-const MUSIC_FADE_MS = 1300;
-const MUSIC_STEP_MS = 60;
+const MUSIC_FADE_MS = 2200;
+const MUSIC_STEP_MS = 40;
 let currentMusic = null;
 let musicFadeTimer = null;
 let userHasInteracted = false;
@@ -249,6 +249,7 @@ function interpolatePoints(a,b,p){
 /* profile */
 function openProfile(e){
   $("ptitle").textContent=e.code+" // "+e.name; $("pcode").textContent=e.code; $("pnick").textContent=e.nick;
+  $("pdesc").textContent=e.desc||"";
   $("c1").innerHTML=wheel(PHYS,e.physical,PCOL,"p"); $("c2").innerHTML=wheel(MENT,e.mental,MCOL,"m");
   $("physical-desc").textContent=e.physicalDesc||"";
   $("mental-desc").textContent=e.mentalDesc||"";
@@ -286,4 +287,3 @@ $("sf").addEventListener("submit",ev=>{ev.preventDefault();
 $("card").addEventListener("click",()=>openProfile(current));
 const home=()=>{run++;clearInterval(timer);$("q").value="";$("msg").textContent="";show("prompt");$("q").focus();};
 $("rback").addEventListener("click",home); $("close").addEventListener("click",home);
-
