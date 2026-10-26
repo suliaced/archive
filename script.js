@@ -44,7 +44,7 @@ const bootMusic = document.getElementById("bootMusic");
 const interfaceMusic = document.getElementById("interfaceMusic");
 
 // Keep both tracks at a safe starting volume and crossfade between them.
-const MUSIC_FADE_MS = 2200;
+const MUSIC_FADE_MS = 1200;
 const MUSIC_STEP_MS = 40;
 let currentMusic = null;
 let musicFadeTimer = null;
@@ -164,7 +164,7 @@ async function reveal(e){
   log.textContent=""; card.hidden=true; current=e; show("result");
   const ok=()=>id===run;
   if(loaded.has(e.name)){ log.textContent="> file already loaded\n"; $("rcode").textContent=e.code; $("rnick").textContent=e.nick; card.hidden=false; card.focus(); return; }
-  for(const l of ["> locating file ...","> found."]){ if(!ok())return; log.textContent+=l+"\n"; await sleep(450); }
+  for(const l of ["> locating file ...","> found"]){ if(!ok())return; log.textContent+=l+"\n"; await sleep(450); }
   if(!ok())return; log.textContent+="> decrypting ";
   const base=log.textContent;
   for(let i=1;i<=20;i++){ if(!ok())return; log.textContent=base+"["+"█".repeat(i)+"░".repeat(20-i)+"]"; await sleep(60); }
