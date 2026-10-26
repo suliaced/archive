@@ -139,7 +139,7 @@ function renderLoaded(){
   const log=$("bootlog");
   const type=async s=>{for(const ch of s){log.textContent+=ch;await sleep(ch===" "||ch==="."?12:22+Math.random()*38);}};
   await sleep(400);
-  for(const l of ["ARCHIVE SYSTEM v1.0","checking memory .......... ok","mounting records ......... ok","balancing karmas ................. ok","","ready."]){
+  for(const l of ["ARCHIVE SYSTEM v1.0","checking memory .......... ok","mounting records ......... ok","balancing karmas ................ ok","","ready."]){
     if(l.endsWith(" ok")){ await type(l.slice(0,-2)); await sleep(260); log.textContent+="ok"; }
     else await type(l);
     log.textContent+="\n"; await sleep(l?200:120);
