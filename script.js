@@ -253,7 +253,9 @@ log.textContent += "> decrypting ";
 const base = log.textContent;
 
 // Random duration between 500ms and 3500ms
-const decryptTime = 500 + Math.random() * 3000;
+const decryptTime = Math.floor(
+  500 + Math.random() * 3000
+);
 
 const steps = 20;
 const stepTime = decryptTime / steps;
