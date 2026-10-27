@@ -52,6 +52,24 @@ const bootMusic = document.getElementById("bootMusic");
 const interfaceMusic = document.getElementById("interfaceMusic");
 const decryptSfx = document.getElementById("decryptSfx");
 const loadedSfx = document.getElementById("loadedSfx");
+const typeSfx = document.getElementById("typeSfx");
+
+let lastTypeSound = 0;
+
+function playTypeSound(){
+  if(!typeSfx) return;
+
+  const now = performance.now();
+
+  if(now - lastTypeSound < 45) return;
+
+  lastTypeSound = now;
+
+  typeSfx.currentTime = 0;
+  typeSfx.volume = 0.12;
+
+  typeSfx.play().catch(()=>{});
+}
 
 function playSfx(audio) {
   if (!audio) return;
@@ -334,6 +352,7 @@ document.querySelectorAll(".category-btn").forEach(btn=>{
   });
 });
 
+$("q").addEventListener("input",playTypeSound);
 $("sf").addEventListener("submit",ev=>{ev.preventDefault();
   const hit=FILES.find(x=>norm(x.name)===norm($("q").value));
   if(hit){$("msg").textContent="";reveal(hit);} else $("msg").textContent="no file found.";});
