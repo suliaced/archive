@@ -22,6 +22,48 @@ const FILES = [
     physicalDesc:"beast",
     mentalDesc:"genius"
   }),
+   person({
+  name:"Physical Guide",
+  code:"",
+  nick:"",
+  id:"physical-guide",
+
+  speed:0,
+  strength:0,
+  durability:0,
+  height:0,
+  stamina:0,
+  precision:0,
+
+  cognition:0,
+  social:0,
+  adaptability:0,
+  creativity:0,
+  composure:0,
+  perception:0,
+
+  guide:true,
+
+  desc:`
+<span style="color:#ff5d5d">SPEED</span>
+Physical speed, how fast they are when running, how fast they can perform a physical action, et-cetera.
+
+<span style="color:#ff9a3c">STRENGTH</span>
+Physical strength, how powerful they are, how much they can lift, how much force they have in their muscles.
+
+<span style="color:#ffd23f">DURABILITY</span>
+How durable they are, how tanky they are, how well they can absorb damage.
+
+<span style="color:#2ee6c5">HEIGHT</span>
+How tall they are. Self explanatory.
+
+<span style="color:#5aa9ff">STAMINA</span>
+How much they can endure, how long they can go before giving out.
+
+<span style="color:#b57cff">PRECISION</span>
+How precise they are in movements, how much control over their muscles they have.
+`
+})
   person({
     name:"Sample Two", code:"S-02", nick:"The Second", id:"sample-two",
     speed:3, strength:3, durability:3, height:3, stamina:2, precision:2,
