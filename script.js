@@ -62,8 +62,8 @@ How much they can endure, how long they can go before giving out.
 
 <span style="color:#b57cff">PRECISION</span>
 How precise they are in movements, how much control over their muscles they have.
-`
-})
+
+}),
   person({
     name:"Sample Two", code:"S-02", nick:"The Second", id:"sample-two",
     speed:3, strength:3, durability:3, height:3, stamina:2, precision:2,
