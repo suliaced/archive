@@ -361,6 +361,25 @@ function interpolatePoints(a,b,p){
 
 /* profile */
 function openProfile(e){
+     if(e.guide){
+
+    $("ptitle").textContent = e.code + " // " + e.name;
+    $("pcode").textContent = "";
+    $("pnick").textContent = "";
+
+    document.querySelector(".identity").style.display = "none";
+    document.querySelector(".categories").style.display = "none";
+
+    $("pdesc").innerHTML = e.desc;
+
+    show("profile");
+    window.scrollTo(0,0);
+    $("close").focus();
+
+    return;
+  }
+   document.querySelector(".identity").style.display = "";
+   document.querySelector(".categories").style.display = "";
   $("ptitle").textContent=e.code+" // "+e.name; $("pcode").textContent=e.code; $("pnick").textContent=e.nick;
   $("pdesc").textContent=e.desc||"";
   $("c1").innerHTML=wheel(PHYS,e.physical,PCOL,"p"); $("c2").innerHTML=wheel(MENT,e.mental,MCOL,"m");
