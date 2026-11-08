@@ -1,0 +1,25 @@
+/* Survey submission 2026-11-08T21:29:52.114Z */
+addFile({
+  "name": "Hutao Romero",
+  "code": "R-HBAO",
+  "nick": "The Magician",
+  "id": "hutao-romero-mw8cihjdhbao",
+  "speed": 8,
+  "strength": 6,
+  "durability": 9,
+  "height": 10,
+  "stamina": 6,
+  "precision": 7,
+  "cognition": 10,
+  "social": 6,
+  "adaptability": 10,
+  "creativity": 7,
+  "composure": 10,
+  "perception": 7,
+  "desc": "Im a soccer player\n\n- Proud of: my life\n- Free will: free will exists\n- Wants most: love\n- Afraid of: death",
+  "extra": {},
+  "song": "NTixkk1aauI",
+  "songTitle": "God",
+  "physicalDesc": "Self-rated.",
+  "mentalDesc": "Self-rated."
+});
