@@ -1,0 +1,25 @@
+/* Survey submission 2026-11-08T21:43:18.980Z */
+addFile({
+  "name": "EDward",
+  "code": "R-8DDM",
+  "nick": "king of bass",
+  "id": "edward-mw8czs4r8ddm",
+  "speed": 8,
+  "strength": 9,
+  "durability": 7,
+  "height": 9,
+  "stamina": 6,
+  "precision": 3,
+  "cognition": 7,
+  "social": 3,
+  "adaptability": 8,
+  "creativity": 3,
+  "composure": 7,
+  "perception": 7,
+  "desc": "Im an architect\n\n- Proud of: my work\n- Free will: i think we can all choose\n- Wants most: Food\n- Afraid of: space",
+  "extra": {},
+  "song": "5A_XMGAzaWo",
+  "songTitle": "Edward Skeletrix - GOD (prod. lush soma)",
+  "physicalDesc": "Self-rated.",
+  "mentalDesc": "Self-rated."
+});
